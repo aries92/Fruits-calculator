@@ -1,0 +1,168 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Fruits Calculator</title>
+</head>
+
+<style type="text/css">
+
+	table {
+		margin-top: 50px;
+	}
+
+	tr,td {
+		border: 1px solid;
+		padding: 10px;
+	}
+
+	input {
+		border: 1px solid black;
+	}
+
+	input:focus {
+		outline: red;		
+	}
+
+/*	input:invalid {
+		border: 1px solid red;
+	}*/
+</style>
+
+<body>
+
+  <h1>Fruits Calculator</h1>
+
+  <form>
+	  Обсяг<br>
+	  <input type="number" id="quantity" name="Обсяг" required>
+	  <p></p>
+
+	  Відстань<br>
+	  <input type="number" id="distance" name="Відстань" required>
+	  <p></p>
+
+	  <label><input type="checkbox" id="item1" value="1">Яблуко</label>
+	  <label><input type="checkbox" id="item2" value="2">Кавун</label><br>
+	  <label><input type="checkbox" id="item3" value="3">Ківі</label>
+	  <label><input type="checkbox" id="item4" value="4">Персик</label><br>
+	  <label><input type="checkbox" id="item5" value="5">Груша</label>
+	  <p></p>
+	  <button id="loadButton" type="button">OK</button>
+</form>
+
+  <div id="result"></div>
+
+
+  <script>
+
+	(function () {
+
+
+
+	    function calculateItems() {
+	        // Inputs
+	        var quantity = $("#quantity"),
+	            distance = $("#distance"),
+
+	            //Checkboxes
+	            item1 = $("#item1"),
+	            item2 = $("#item2"),
+	            item3 = $("#item3"),
+	            item4 = $("#item4"),
+	            item5 = $("#item5");
+
+
+	        // INPUTS VALIDATION
+
+	        var inputList = $("input[type='number']");
+	        var errorMessage = "";
+
+	        for (var i = 0; i < inputList.length; i++) {
+	        	if (inputList[i].value == "") {
+	            	inputList[i].style.borderColor = "red";
+		            errorMessage += "Fill " + inputList[i].name + "\n";
+		            inputList[i].addEventListener("input", function (e) {
+		            	this.style.borderColor = "";
+		            });
+	        	} 
+	        };
+
+        	if (errorMessage != "") {
+        		inputList[0].focus();
+        		alert(errorMessage);
+        		return false;
+        	}
+
+
+	        // CHECKBOX VALIDATION
+	        var inputChecked = $("input:checked");
+
+	        if (inputChecked.length == 0) {
+	            alert("check at least one checkbox")
+	            return false;
+	        };
+
+	        // Calculate
+
+	        function isChecked (e) {
+	        	// (e.checked) ? return e.value : return null;
+	        	if (e[0].checked) {
+	        		return +e[0].value;
+	        	} else {
+	        		return null;
+	        	}
+	        }
+
+	        function isCalc(e) {
+	            switch (e[0].id) {
+	                case "item1":
+	                    return isChecked(item1);
+	                break;
+
+	                case "item2":
+	                    return isChecked(item2);
+	                break;
+
+	                case "item3":
+	                    return isChecked(item3);
+	                break;
+
+	                case "item4":
+	                    return isChecked(item4);
+	                break;
+
+	                case "item5":
+	                    return isChecked(item5);
+	                break;
+	            };
+	        }
+
+	        var FORMULA = +quantity[0].value * (isCalc(item1) + isCalc(item2) + isCalc(item3) + isCalc(item4) + isCalc(item5)) / +distance[0].value;
+
+	        	if (FORMULA == 0) {
+	        		alert("bad inputs data")
+	        		return false
+	        	};
+	        
+	        	alert("Your price is " + FORMULA.toFixed());
+	    }
+
+	    // helpfull functions
+		function $(e) {return document.querySelectorAll(e);}
+
+	    var button = $("#loadButton");
+	    button[0].addEventListener("click", calculateItems);
+
+
+
+
+	})();
+
+
+  </script>
+
+</body>
+
+</html>
